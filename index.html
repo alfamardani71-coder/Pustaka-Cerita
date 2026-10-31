@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pustaka Cerita</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Young+Serif&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#E6EEF4;--page:#FBFDFF;--ink:#1B2838;--soft:#4A5B70;--accent:#1F7A8C;--on:#fff;--line:#C9D6E2;--shadow:rgba(27,40,56,.18);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1622;--page:#172234;--ink:#E9F0F8;--soft:#A5B5C8;--accent:#5CC2D6;--on:#0E1622;--line:#2B3A52;--shadow:rgba(0,0,0,.5);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E1622;--page:#172234;--ink:#E9F0F8;--soft:#A5B5C8;--accent:#5CC2D6;--on:#0E1622;--line:#2B3A52;--shadow:rgba(0,0,0,.5);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:"Atkinson Hyperlegible",system-ui,"Segoe UI",Arial,sans-serif;font-size:18px;line-height:1.6}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:16px clamp(16px,4vw,40px);border-bottom:1px solid var(--line)}
+.brand{font-family:"Young Serif",Georgia,serif;font-size:1.5rem;margin:0}
+.tools{display:flex;gap:8px;align-items:center}
+.tools button{min-width:44px;height:44px;padding:0 12px;border:2px solid var(--line);border-radius:12px;background:var(--page)}
+.tools button:hover{border-color:var(--accent)}
+main{max-width:1100px;margin:0 auto;padding:28px clamp(16px,4vw,40px) 56px}
+h2{font-family:"Young Serif",Georgia,serif;font-weight:400;font-size:clamp(1.8rem,5vw,2.6rem);line-height:1.2;margin:0 0 8px}
+.lead{color:var(--soft);max-width:60ch;margin:0 0 28px}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:22px}
+.cover{text-align:left;display:flex;flex-direction:column;gap:6px;min-height:270px;padding:20px 18px 18px 26px;border:0;border-radius:6px 14px 14px 6px;background:var(--page);border-left:14px solid var(--c);box-shadow:0 8px 20px var(--shadow);transition:transform .15s}
+.cover:hover{transform:translateY(-4px)}
+.cover .em{font-size:3.4rem;line-height:1.1}
+.cover b{font-family:"Young Serif",Georgia,serif;font-weight:400;font-size:1.25rem;line-height:1.3}
+.cover span{color:var(--soft);font-size:.95rem;margin-top:auto}
+#reader{display:none}
+.bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.bar button{height:44px;padding:0 16px;border:2px solid var(--line);border-radius:12px;background:var(--page)}
+.bar h2{font-size:clamp(1.3rem,3.5vw,1.8rem);margin:0}
+.book{display:grid;grid-template-columns:1fr;border-radius:10px;box-shadow:0 14px 34px var(--shadow);background:var(--page);overflow:hidden}
+.pg{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;min-height:min(62vh,560px);padding:32px 28px 48px;background:var(--page);text-align:center}
+.pg p{margin:0;max-width:34ch;font-size:var(--fs,22px);line-height:1.7}
+.art{font-size:clamp(4rem,14vw,7rem);line-height:1}
+.art img{max-width:100%;max-height:260px;border-radius:8px}
+.no{position:absolute;bottom:14px;left:0;right:0;font-size:.9rem;color:var(--soft)}
+@media (min-width:820px){.book{grid-template-columns:1fr 1fr;position:relative}.book::after{content:"";position:absolute;top:0;bottom:0;left:50%;width:40px;transform:translateX(-50%);background:linear-gradient(90deg,transparent,var(--shadow),transparent);opacity:.5;pointer-events:none}}
+.turn{animation:turn .35s ease-out}
+@keyframes turn{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.turn{animation:none}.cover{transition:none}}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:20px}
+.nav button{min-width:130px;height:52px;border:0;border-radius:14px;background:var(--accent);color:var(--on);font-weight:700}
+.nav button:disabled{opacity:.35;cursor:default}
+#status{color:var(--soft);text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <p class="brand">Pustaka Cerita</p>
+  <div class="tools" role="group" aria-label="Pengaturan tampilan">
+    <button id="smaller" aria-label="Perkecil huruf">A−</button>
+    <button id="bigger" aria-label="Perbesar huruf">A+</button>
+    <button id="theme" aria-label="Ganti mode terang atau gelap">Mode</button>
+  </div>
+</header>
+<main>
+  <section id="library">
+    <h2>Pilih cerita yang ingin dibaca</h2>
+    <p class="lead">Ketuk sebuah buku untuk mulai membaca. Ukuran huruf dan mode terang atau gelap bisa diatur di pojok kanan atas.</p>
+    <div class="shelf" id="shelf"></div>
+  </section>
+  <section id="reader" aria-live="polite">
+    <div class="bar"><button id="back">Semua cerita</button><h2 id="rtitle" tabindex="-1"></h2></div>
+    <div class="book" id="book"></div>
+    <div class="nav">
+      <button id="prev">Sebelumnya</button>
+      <div id="status"></div>
+      <button id="next">Berikutnya</button>
+    </div>
+  </section>
+</main>
+<script>
+/* Ganti isi daftar cerita ini dengan ceritamu.
+   Tiap halaman: text (teks), art (emoji) ATAU img (alamat gambar/data URI) dan alt (deskripsi gambar). */
+const STORIES=[
+{title:"Kancil dan Bulan di Sungai",color:"#1F7A8C",cover:"🦌",desc:"Cerita contoh",pages:[
+{art:"🌙",text:"Pada suatu malam, Kancil berjalan menuju sungai untuk minum. Langit cerah dan bulan bersinar terang."},
+{art:"💧",text:"Di permukaan air, Kancil melihat bulan yang bulat. “Wah, ada bulan jatuh ke sungai!” serunya."},
+{art:"🐊",text:"Buaya tertawa mendengarnya. “Bulan tidak bisa jatuh, Kancil. Itu hanya bayangan.”"},
+{art:"✨",text:"Kancil menengadah. Bulan yang asli masih ada di langit. Ia pun tersenyum malu."},
+{art:"🤝",text:"Buaya ikut menengadah. “Indah sekali,” katanya pelan. Sejak malam itu, mereka berteman."},
+{art:"🌅",text:"Mereka menikmati bulan bersama-sama sampai fajar tiba. Tamat."}]},
+{title:"Biji Kecil Bu Sari",color:"#C77D0A",cover:"🌱",desc:"Cerita contoh",pages:[
+{art:"🌱",text:"Bu Sari menanam sebutir biji kecil di halaman rumah. Setiap pagi ia menyiramnya dengan sabar."},
+{art:"🌧️",text:"Hari berganti. Hujan turun dan matahari bersinar, tetapi biji itu tetap diam di dalam tanah."},
+{art:"🌿",text:"Pada suatu pagi, sebuah tunas hijau muncul. Bu Sari bersorak gembira."},
+{art:"🌻",text:"Berbulan-bulan kemudian, bunga matahari yang tinggi mekar. Semua tetangga datang untuk melihatnya."}]}
+];
+const $=s=>document.querySelector(s),root=document.documentElement,mq=matchMedia("(min-width:820px)");
+let cur=null,idx=0,fs=22;
+try{const f=+localStorage.getItem("pc-fs");if(f>=16&&f<=36)fs=f;const t=localStorage.getItem("pc-theme");if(t)root.dataset.theme=t}catch(e){}
+function setFs(v){fs=Math.min(36,Math.max(16,v));root.style.setProperty("--fs",fs+"px");try{localStorage.setItem("pc-fs",fs)}catch(e){}}
+setFs(fs);
+$("#smaller").onclick=()=>setFs(fs-2);
+$("#bigger").onclick=()=>setFs(fs+2);
+$("#theme").onclick=()=>{const dark=root.dataset.theme?root.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;const n=dark?"light":"dark";root.dataset.theme=n;try{localStorage.setItem("pc-theme",n)}catch(e){}};
+$("#shelf").innerHTML=STORIES.map((s,i)=>`<button class="cover" style="--c:${s.color}" data-i="${i}"><span class="em" aria-hidden="true">${s.cover}</span><b>${s.title}</b><span>${s.desc} · ${s.pages.length} halaman</span></button>`).join("");
+$("#shelf").onclick=e=>{const b=e.target.closest(".cover");if(b)open(+b.dataset.i)};
+function open(i){cur=STORIES[i];idx=0;$("#library").style.display="none";$("#reader").style.display="block";$("#rtitle").textContent=cur.title;draw();$("#rtitle").focus();scrollTo(0,0)}
+$("#back").onclick=()=>{$("#reader").style.display="none";$("#library").style.display="block";scrollTo(0,0)};
+function pg(p,n){if(!p)return'<div class="pg" aria-hidden="true"></div>';const a=p.img?`<img src="${p.img}" alt="${p.alt||""}">`:p.art;return`<article class="pg"><div class="art" ${p.img?"":'aria-hidden="true"'}>${a}</div><p>${p.text}</p><span class="no">${n}</span></article>`}
+function draw(){const st=mq.matches?2:1,n=cur.pages.length;idx=Math.floor(idx/st)*st;const b=$("#book");b.innerHTML=pg(cur.pages[idx],idx+1)+(st===2?pg(cur.pages[idx+1],idx+2):"");b.classList.remove("turn");void b.offsetWidth;b.classList.add("turn");$("#prev").disabled=idx<=0;$("#next").disabled=idx+st>=n;const e=Math.min(idx+st,n);$("#status").textContent=(st===2&&e>idx+1?`Halaman ${idx+1}–${e}`:`Halaman ${idx+1}`)+` dari ${n}`}
+$("#prev").onclick=()=>{idx-=mq.matches?2:1;draw()};
+$("#next").onclick=()=>{idx+=mq.matches?2:1;draw()};
+mq.onchange=()=>{if(cur&&$("#reader").style.display==="block")draw()};
+addEventListener("keydown",e=>{if($("#reader").style.display!=="block")return;if(e.key==="ArrowRight"&&!$("#next").disabled)$("#next").click();if(e.key==="ArrowLeft"&&!$("#prev").disabled)$("#prev").click()});
+</script>
+</body>
+</html>
